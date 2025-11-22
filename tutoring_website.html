@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alchemist Class | Tushar Sir - Python, Java, Computer Science Tuition</title>
+  <style>
+    :root {
+      --vibrant-lavender: #c770d5;
+      --pale-cream: #FFF9E6;
+      --soft-pink: #f4c2c2;
+      --deep-purple: #8e44ad;
+      --light-coral: #ffb6b9;
+      --dark-charcoal: #333333;
+      --muted-blue: #2E5266;
+      --accent-teal: #7fc1b5;
+      --white: #ffffff;
+      
+      --bg-primary: #000000;
+      --bg-secondary: rgba(255, 255, 255, 0.03);
+      --bg-tertiary: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.8);
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(127, 193, 181, 0.3);
+      --nav-bg: rgba(0, 0, 0, 0.95);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-tertiary: #e9ecef;
+      --text-primary: #1a1a1a;
+      --text-secondary: #333333;
+      --text-muted: #666666;
+      --border-color: rgba(46, 82, 102, 0.3);
+      --nav-bg: rgba(255, 255, 255, 0.95);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .top-ribbon {
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(to right, var(--vibrant-lavender), var(--pale-cream), var(--light-coral), var(--deep-purple));
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    
+    nav {
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background-color: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      transition: background-color 0.3s ease;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--vibrant-lavender), var(--accent-teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      gap: 30px;
+    }
+    
+    nav ul li a {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    nav ul li a.active,
+    nav ul li a:hover {
+      color: var(--accent-teal);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--accent-teal);
+      transition: width 0.3s ease;
+    }
+    
+    nav ul li a:hover::after,
+    nav ul li a.active::after {
+      width: 100%;
+    }
+
+    .theme-toggle {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      border-radius: 25px;
+      padding: 8px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent-teal);
+      transform: scale(1.05);
+    }
+
+    .theme-icon {
+      font-size: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+    
+    section {
+      padding: 80px 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    
+    .hero {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(142, 68, 173, 0.05) 0%, rgba(127, 193, 181, 0.05) 100%);
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--vibrant-lavender), var(--accent-teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero .subtitle {
+      font-size: 24px;
+      color: var(--light-coral);
+      margin-bottom: 20px;
+    }
+    
+    .hero .tagline {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+
+    .hero .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background-color: var(--bg-tertiary);
+      padding: 15px 25px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--accent-teal);
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      padding: 12px 30px;
+      border: 2px solid var(--accent-teal);
+      background-color: transparent;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .btn:hover {
+      background-color: var(--accent-teal);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(127, 193, 181, 0.3);
+    }
+    
+    .btn-primary {
+      background-color: var(--accent-teal);
+      color: var(--white);
+    }
+    
+    .btn-primary:hover {
+      background-color: transparent;
+      color: var(--text-primary);
+    }
+    
+    .section-title {
+      font-size: 36px;
+      text-align: center;
+      margin-bottom: 50px;
+      color: var(--accent-teal);
+    }
+    
+    .courses {
+      background-color: var(--bg-secondary);
+    }
+    
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .skill-category {
+      background-color: var(--bg-tertiary);
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .skill-category:hover {
+      border-color: var(--accent-teal);
+      transform: translateY(-5px);
+    }
+    
+    .skill-category h3 {
+      color: var(--accent-teal);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .skill-tag {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent-teal);
+      transform: scale(1.05);
+    }
+
+    .reviews {
+      background-color: var(--bg-primary);
+    }
+    
+    .contact {
+      background: linear-gradient(135deg, rgba(142, 68, 173, 0.05) 0%, rgba(127, 193, 181, 0.05) 100%);
+      text-align: center;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .contact-item {
+      background-color: var(--bg-tertiary);
+      padding: 20px 30px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    
+    .contact-item:hover {
+      background-color: var(--bg-secondary);
+      transform: translateY(-5px);
+      border-color: var(--accent-teal);
+    }
+
+    .contact-item p {
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+    
+    .contact-item a {
+      color: var(--accent-teal);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 30px;
+      background-color: var(--bg-secondary);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 30px;
+      }
+
+      .nav-content {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .hero h1 {
+        font-size: 36px;
+      }
+      
+      section {
+        padding: 60px 0;
+        min-height: auto;
+      }
+
+      .hero .stats {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-ribbon"></div>
+  
+  <nav>
+    <div class="logo">🎓 Alchemist Class</div>
+    <div class="nav-content">
+      <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <div class="container">
+      <h1>Alchemist Class</h1>
+      <p class="subtitle">Best Python, Java & Computer Science Tuition in Indirapuram</p>
+      <p class="tagline">Learn programming from an experienced software developer with 4+ years of industry experience at BlackRock & Deutsche Telekom. Personal one-on-one classes, home tuition, and online sessions available.</p>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Years Teaching</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Students Taught</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4.9★</div>
+          <div class="stat-label">Google Rating (60+ Reviews)</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <a href="#contact" class="btn btn-primary">Book Free Demo Class</a>
+        <a href="tel:+919311212964" class="btn">📞 Call Now</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="courses" class="courses">
+    <div class="container">
+      <h2 class="section-title">Our Courses</h2>
+      <div class="skills-container">
+        <div class="skill-category">
+          <h3>📚 Programming Courses</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Python (CBSE/ICSE)</span>
+            <span class="skill-tag">Java Programming</span>
+            <span class="skill-tag">C++ Fundamentals</span>
+            <span class="skill-tag">Data Structures & Algorithms</span>
+            <span class="skill-tag">Data Science & Analytics</span>
+            <span class="skill-tag">Git & GitHub</span>
+            <span class="skill-tag">Computer Science (11-12)</span>
+            <span class="skill-tag">Industrial Training</span>
+          </div>
+        </div>
+        
+        <div class="skill-category">
+          <h3>🎓 Teaching Format</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">One-on-One Classes</span>
+            <span class="skill-tag">Home Tuition</span>
+            <span class="skill-tag">Online Sessions</span>
+            <span class="skill-tag">Batch Classes</span>
+            <span class="skill-tag">Project Guidance</span>
+            <span class="skill-tag">Exam Preparation</span>
+            <span class="skill-tag">Crash Courses</span>
+            <span class="skill-tag">Career Mentoring</span>
+          </div>
+        </div>
+        
+        <div class="skill-category">
+          <h3>📍 Service Areas</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Indirapuram</span>
+            <span class="skill-tag">Vaishali</span>
+            <span class="skill-tag">Vasundhara</span>
+            <span class="skill-tag">Abhay Khand</span>
+            <span class="skill-tag">Ahinsa Khand</span>
+            <span class="skill-tag">Gyan Khand</span>
+            <span class="skill-tag">Nyay Khand</span>
+            <span class="skill-tag">Shipra Suncity</span>
+            <span class="skill-tag">Online (Worldwide)</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3>🎯 Perfect For</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">CBSE Students (11-12)</span>
+            <span class="skill-tag">ICSE Students</span>
+            <span class="skill-tag">B.Tech Students</span>
+            <span class="skill-tag">Career Switchers</span>
+            <span class="skill-tag">Working Professionals</span>
+            <span class="skill-tag">International Students</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 50px; background-color: var(--bg-tertiary); padding: 40px; border-radius: 15px; border: 1px solid var(--border-color);">
+        <h3 style="color: var(--accent-teal); margin-bottom: 20px;">Why Choose Alchemist Class?</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left;">
+          <div>
+            <h4 style="color: var(--light-coral); margin-bottom: 10px;">✨ Industry Experience</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;">Learn from a software engineer with 4+ years at BlackRock & Deutsche Telekom</p>
+          </div>
+          <div>
+            <h4 style="color: var(--light-coral); margin-bottom: 10px;">🎯 Personalized Approach</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;">One-on-one attention tailored to your learning pace and goals</p>
+          </div>
+          <div>
+            <h4 style="color: var(--light-coral); margin-bottom: 10px;">💡 Practical Learning</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;">Real-world projects and hands-on coding practice</p>
+          </div>
+          <div>
+            <h4 style="color: var(--light-coral); margin-bottom: 10px;">🏆 Proven Results</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;">Students achieving 90+ scores in boards and successful placements</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="reviews">
+    <div class="container">
+      <h3 style="text-align: center; color: var(--accent-teal); margin-bottom: 10px; font-size: 32px;">💬 What Students Say</h3>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px;">60+ Five Star Reviews on Google</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, rgba(199, 112, 213, 0.1), rgba(127, 193, 181, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--vibrant-lavender), var(--accent-teal)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">A</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Aishwarya Shekhar</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "As a housewife looking to restart my career in data science, Tushar sir's classes were perfect. He never rushes—emphasizes deep understanding of concepts."
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">Data Science Student</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(244, 194, 194, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--deep-purple), var(--light-coral)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">S</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Siimar Leen Kaur</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "His way of breaking down tough Java concepts into simple ideas made me actually enjoy coding. Thanks to him, I worked on my Java project confidently!"
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">Java Programming Student</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(127, 193, 181, 0.1), rgba(199, 112, 213, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-teal), var(--vibrant-lavender)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">K</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Kamlesh Karakoti</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "Teaching style was clear, engaging, and tailored to different learning paces. Practical exercises were challenging, solidifying my programming skills."
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">Python & C++ Student</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(244, 194, 194, 0.1), rgba(142, 68, 173, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--light-coral), var(--deep-purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">H</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Harshit Rawat</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "Very experienced and humorous! This Java course completely changed my perspective. His modern teaching approach is commendable. Highly recommended!"
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">Industrial Training</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(199, 112, 213, 0.1), rgba(244, 194, 194, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--vibrant-lavender), var(--light-coral)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">V</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Vibhor Jain</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "Initially struggling with Python, but after taking classes from Tushar sir, my confidence boosted a lot. Explains concepts in a way that's easy to grasp!"
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">CBSE Python Student</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(127, 193, 181, 0.1), rgba(142, 68, 173, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-teal), var(--deep-purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">R</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">RAKHI Jain</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "My son is studying masters from Ireland and wasn't comfortable with Python. After 2-3 classes from Tushar sir, there's been a lot of change. Thanks!"
+          </p>
+          <div style="margin-top: 12px; color: var(--text-muted); font-size: 12px;">Parent • International Student</div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(127, 193, 181, 0.1)); padding: 25px; border-radius: 15px; border: 2px solid var(--border-color); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--deep-purple), var(--accent-teal)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 12px;">P</div>
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary);">Priyanshi Agarwal</div>
+              <div style="color: var(--accent-teal); font-size: 16px;">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; font-style: italic;">
+            "Teaching style is engaging and effective. Patient, knowledgeable, and passionate about Python. Highly recommend to anyone looking to improve coding skills!"
+          </p>
+          
